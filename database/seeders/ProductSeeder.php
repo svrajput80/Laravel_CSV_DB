@@ -1,19 +1,21 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Database\Seeders;
 
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
 use App\Models\LocalCommunity;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\LazyCollection;
 
-class Controller extends BaseController
-{
-    use AuthorizesRequests, ValidatesRequests;
-
-    public function uploadcsv()
+class ProductSeeder extends Seeder 
+  {
+  /**
+  * Run the database seeds.
+  *
+  * @return void
+  */
+  public function run()
   {
     DB::disableQueryLog();
     // DB::table('products')->truncate();
@@ -29,25 +31,18 @@ class Controller extends BaseController
 
       fclose($handle);
     })
-    // ->skip(1)
-    ->chunk(10000)
+    ->skip(1)
+    ->chunk(1000)
     ->each(function (LazyCollection $chunk) {
       $records = $chunk->map(function ($row) {
+        dd($row);
       return [
-        "row" => $row[0],
-        // "sku" => $row[1],
-        // "price" => $row[2]
+        "name" => $row[0],
+        "sku" => $row[1],
+        "price" => $row[2]
       ];
       })->toArray();
-      foreach($records as $data){
-        $records = explode(',', $data['row']);
-        echo "<pre>";
-      print_r($records);
-      }
-    //   $records = explode(',', $records[0]['row']);
-    //   echo "<pre>";
-    //   print_r($records);
-      die;
+      
       DB::table('products')->insert($records);
     });
   }
