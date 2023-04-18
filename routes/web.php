@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Controller;
 use App\Imports\UsersImport;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -26,3 +28,6 @@ Route::post('import', function () {
     Excel::import(new UsersImport, request()->file('file'));
     return redirect()->back()->with('success','Data Imported Successfully');
 });
+
+
+Route::get('/home', [Controller::class, 'uploadcsv']);
